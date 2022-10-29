@@ -24,6 +24,7 @@ module "ec2" {
   source = "../modules/ec2"
 
   name                   = "cicd"
+  instance_type          = "t2.small"
   ami                    = data.aws_ami.amazon_linux.id
   key_name               = module.key_pair.key_pair_name
   subnet_id              = element(module.vpc.public_subnets, 0)

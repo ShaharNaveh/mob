@@ -38,7 +38,7 @@ variable "subnet_id" {
 variable "disable_api_stop" {
   description = "If true, enables EC2 Instance Stop Protection."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "disable_api_termination" {
