@@ -43,5 +43,14 @@ pipeline {
                                 }
                         }
                 }
+
+                stage('Deploy chart') {
+                        steps {
+                                withAWS(credentials: 'infra') {
+                                        sh 'aws eks update-kubeconfig --region eu-central-1 --name mob'
+                                        sh 'helm upgrade --install websrv ./charts/websrv/ --force --namespace=websrv --create-namespace'
+                                }
+                        }
+                }
         }
 }

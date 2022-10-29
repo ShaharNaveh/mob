@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: 521955458751.dkr.ecr.eu-central-1.amazonaws.com/websrv
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+nameOverride: "websrv"
+fullnameOverride: "websrv"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  hosts:
+    - host: "*"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    # No reason to choke CPU
+    # cpu: 100m
+    memory: 16Mi
+  requests:
+    cpu: 2m
+    memory: 16Mi
