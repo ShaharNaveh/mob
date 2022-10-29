@@ -34,3 +34,9 @@ terraform apply -auto-approve
 cd ansible/
 ansible-playbook deploy.yaml
 ```
+
+### Task-8
+
+Proof:
+
+![mob-proof](https://user-images.githubusercontent.com/50263213/198839535-17b92903-3656-4526-9d27-5be5318b5e0d.png)
