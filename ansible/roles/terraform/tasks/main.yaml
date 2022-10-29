@@ -1,0 +1,10 @@
+---
+- name: terraform check
+  ansible.builtin.command: terraform --version
+  ignore_errors: yes
+  register: terraform_version
+  changed_when: terraform_version.rc != 0
+
+- name: terraform install
+  ansible.builtin.include_tasks: terraform-install.yaml
+  when: terraform_version.rc != 0

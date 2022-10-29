@@ -1,0 +1,10 @@
+---
+- name: git check
+  ansible.builtin.command: git --version
+  ignore_errors: yes
+  register: git_version
+  changed_when: git_version.rc != 0
+
+- name: git install
+  ansible.builtin.include_tasks: git-install.yaml
+  when: git_version.rc != 0

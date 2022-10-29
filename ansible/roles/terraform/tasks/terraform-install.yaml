@@ -1,0 +1,25 @@
+---
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: terraform
+  register: tmpdir
+
+- name: Download terraform.zip
+  ansible.builtin.get_url:
+    url: https://releases.hashicorp.com/terraform/1.3.3/terraform_1.3.3_linux_amd64.zip
+    dest: "{{ tmpdir.path }}/terraform.zip"
+
+- name: Extract terraform.zip
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ tmpdir.path }}/terraform.zip"
+    dest: /usr/local/bin/
+    mode: 555
+    remote_src: true
+
+- name: Delete temporary directory
+  ansible.builtin.file:
+    path: "{{ tmpdir.path }}"
+    state: absent
+  when: tmpdir.path is defined

@@ -1,0 +1,10 @@
+---
+- name: docker check
+  ansible.builtin.command: docker --version
+  ignore_errors: yes
+  register: docker_version
+  changed_when: docker_version.rc != 0
+
+- name: docker install
+  ansible.builtin.include_tasks: docker-install.yaml
+  when: docker_version.rc != 0

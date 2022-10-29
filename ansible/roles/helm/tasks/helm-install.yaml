@@ -1,0 +1,33 @@
+---
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: helm
+  register: tmpdir
+
+- name: Download helm.tar.gz
+  ansible.builtin.get_url:
+    url: https://get.helm.sh/helm-v3.8.2-linux-amd64.tar.gz
+    dest: "{{ tmpdir.path }}/helm.tar.gz"
+
+- name: Extract helm.tar.gz
+  ansible.builtin.unarchive:
+    src: "{{ tmpdir.path }}/helm.tar.gz"
+    include:
+      - linux-amd64/helm
+    dest: "{{ tmpdir.path }}"
+    remote_src: true
+
+- name: Copy helm binary to $PATH
+  become: true
+  ansible.builtin.copy:
+    src: "{{ tmpdir.path }}/linux-amd64/helm"
+    dest: /usr/local/bin/
+    mode: 555
+    remote_src: true
+
+- name: Delete temporary directory
+  ansible.builtin.file:
+    path: "{{ tmpdir.path }}"
+    state: absent
+  when: tmpdir.path is defined

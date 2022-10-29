@@ -1,0 +1,10 @@
+---
+- name: jenkins check
+  ansible.builtin.command: jenkins --version
+  ignore_errors: yes
+  register: jenkins_version
+  changed_when: jenkins_version.rc != 0
+
+- name: jenkins install
+  ansible.builtin.include_tasks: jenkins-install.yaml
+  when: jenkins_version.rc != 0

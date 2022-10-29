@@ -1,0 +1,48 @@
+---
+- name: yum update
+  become: true
+  ansible.builtin.yum:
+    name: "*"
+    state: latest
+
+- name: add the jenkins repo
+  become: true
+  ansible.builtin.get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: import a key file from jenkins-ci
+  become: true
+  ansible.builtin.rpm_key:
+    key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+    state: present
+
+- name: yum update
+  become: true
+  ansible.builtin.yum:
+    name: "*"
+    state: latest
+
+- name: install java
+  become: true
+  ansible.builtin.shell: amazon-linux-extras install java-openjdk11 -y
+
+- name: install jenkins
+  become: true
+  ansible.builtin.yum:
+    name: jenkins
+    state: present
+
+- name: Adding user 'jenkins' to group 'docker'
+  become: true
+  ansible.builtin.user:
+    name: jenkins
+    groups: docker
+    append: true
+
+- name: start jenkins
+  become: true
+  ansible.builtin.systemd:
+    name: jenkins
+    state: started
+    enabled: true

@@ -1,0 +1,10 @@
+---
+- name: helm check
+  ansible.builtin.command: helm version
+  ignore_errors: yes
+  register: helm_version
+  changed_when: helm_version.rc != 0
+
+- name: helm install
+  ansible.builtin.include_tasks: helm-install.yaml
+  when: helm_version.rc != 0
