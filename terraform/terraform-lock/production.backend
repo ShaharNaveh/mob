@@ -1,0 +1,4 @@
+bucket = "snaveh-mob20221024163346718300000001"
+region  = "eu-central-1"
+key     = "infrastructure/terraform-lock.tfstate"
+# encrypt = true
